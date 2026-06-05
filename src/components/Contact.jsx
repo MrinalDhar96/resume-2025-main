@@ -10,7 +10,7 @@ import { slideIn } from "../utils/motion";
 
 // public key pjwand8N8A2gtRpyg
 // template template_5q2nx4k
-// service_oojnh49
+// service_3w2dlur
 
 const Contact = () => {
 
@@ -32,12 +32,15 @@ const Contact = () => {
     setLoading(true);
 
     emailjs.send(
-      'service_oojnh49',
+      'service_3w2dlur',
       'template_5q2nx4k',
       {
+        name: form.name,
+        email: form.email,
         from_name: form.name,
         to_name: 'Mrinal',
         from_email: form.email,
+        reply_to: form.email,
         to_email: 'mrinal.dhar10@gmail.com',
         message: form.message
       },
@@ -56,7 +59,14 @@ const Contact = () => {
       }, (error) => {
         setLoading(false);
         console.log(error);
-        alert('Something went wrong.');
+        const isGmailGrantError =
+          error?.status === 412 && error?.text?.includes('Invalid grant');
+
+        alert(
+          isGmailGrantError
+            ? 'Email service needs to be reconnected. Please try again later.'
+            : 'Something went wrong.'
+        );
       })
   };
 
@@ -81,6 +91,7 @@ const Contact = () => {
               name="name"
               value={form.name}
               onChange={handleChange}
+              required
               placeholder="What's your name?"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
             />
@@ -92,6 +103,7 @@ const Contact = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
+              required
               placeholder="What's your email?"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
             />
@@ -103,6 +115,7 @@ const Contact = () => {
               name="message"
               value={form.message}
               onChange={handleChange}
+              required
               placeholder="What do you want to say?"
               className="bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium"
             />
